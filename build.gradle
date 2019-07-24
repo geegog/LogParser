@@ -26,8 +26,6 @@ dependencies {
     runtimeOnly 'mysql:mysql-connector-java'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-hateoas
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-hateoas', version: '2.1.6.RELEASE'
     // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-jpa
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: '2.1.6.RELEASE'
     // https://mvnrepository.com/artifact/org.springframework.plugin/spring-plugin-core
