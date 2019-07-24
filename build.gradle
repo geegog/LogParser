@@ -5,9 +5,10 @@ plugins {
 
 apply plugin: 'io.spring.dependency-management'
 
-group = 'com.parser'
+group = 'com.ef'
+archivesBaseName = 'parser'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '12'
+sourceCompatibility = '8'
 
 configurations {
     compileOnly {
@@ -20,11 +21,12 @@ repositories {
 }
 
 dependencies {
-    // https://mvnrepository.com/artifact/org.springframework.hateoas/spring-hateoas
-    compile group: 'org.springframework.hateoas', name: 'spring-hateoas', version: '0.25.1.RELEASE'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'mysql:mysql-connector-java'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    // https://mvnrepository.com/artifact/org.springframework.hateoas/spring-hateoas
+    compile group: 'org.springframework.hateoas', name: 'spring-hateoas', version: '0.25.1.RELEASE'
+
 }
