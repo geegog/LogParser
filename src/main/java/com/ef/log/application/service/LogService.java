@@ -39,16 +39,30 @@ public class LogService {
         return log;
     }
 
+    private long fileSize(String fileLocation) throws IOException {
+        long numberOfLines;
+        try (Stream<String> s = Files.lines(Paths.get(fileLocation),
+                Charset.forName("UTF-8"))) {
+            numberOfLines = s.count();
+
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+            throw e;
+        }
+        return numberOfLines;
+    }
+
     public void load() {
         String fileName = "access.log";
 
         logger.info("read started");
 
-        try (BufferedReader br = Files.newBufferedReader(Paths.get(fileName))) {
+        try (BufferedReader br = Files.newBufferedReader(Paths.get(fileName),
+                Charset.forName("UTF-8"))) {
 
-            //long size = br.lines().count();
+            long size = fileSize(fileName);
 
-            //logger.info("Total number of lines is {}", size);
+            logger.info("Total number of lines is {}", size);
 
             // read line by line
             String line;
@@ -58,7 +72,7 @@ public class LogService {
                 String[] data = line.split("\\|");
                 logs.add(createLog(data));
 
-                if ((counter + 1) % 500 == 0 || (counter + 1) == 116484) {
+                if ((counter + 1) % 500 == 0 || (counter + 1) == size) {
                     logger.info("Running batch ......");
                     logRepository.saveAll(logs);
                     logs.clear();
