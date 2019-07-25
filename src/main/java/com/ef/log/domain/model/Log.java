@@ -5,11 +5,14 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.Entity;
+import javax.persistence.Index;
+import javax.persistence.Table;
 import java.time.LocalDateTime;
 
 @Data
 @EqualsAndHashCode(callSuper=true)
 @Entity
+@Table(indexes = { @Index(name = "IDX_IP", columnList = "ip") })
 public class Log extends BaseEntity {
 
     private LocalDateTime dateTime;
