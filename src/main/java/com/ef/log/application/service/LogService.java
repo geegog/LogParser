@@ -2,10 +2,10 @@ package com.ef.log.application.service;
 
 import com.ef.log.domain.model.Log;
 import com.ef.log.domain.repository.LogRepository;
+import com.ef.log.pojo.ParamMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -25,9 +25,6 @@ public class LogService {
 
     @Autowired
     private LogRepository logRepository;
-
-    @Autowired
-    private Environment env;
 
     private Log createLog(String[] line) {
         Log log = new Log();
@@ -68,6 +65,7 @@ public class LogService {
             String line;
             int counter = 0;
             ArrayList<Log> logs = new ArrayList<>();
+
             while ((line = br.readLine()) != null) {
                 String[] data = line.split("\\|");
                 logs.add(createLog(data));
@@ -85,6 +83,11 @@ public class LogService {
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
         }
+    }
+
+    public void getRequests(String... args) {
+        ParamMapper paramMapper = new ParamMapper(args);
+        logger.info(paramMapper.toString());
     }
 
 }
