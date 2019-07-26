@@ -32,7 +32,7 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
 
         logger.info("startDate: {}, duration: {}, threshold: {}", commandLineArguments[0], commandLineArguments[1], commandLineArguments[2]);
 
-        //logService.load(env.getProperty("accesslog"));
+        logService.load(env.getProperty("accesslog"));
         logService.getRequests(commandLineArguments);
         logger.info("Application started with command-line arguments: {} . \n To kill this application, press Ctrl + C.", Arrays.toString(args));
     }
