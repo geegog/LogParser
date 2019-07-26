@@ -15,5 +15,5 @@ The app is built using Sprint Boot and gradle.
 
 java -jar /path/to/jar/parser-0.0.1-SNAPSHOT.jar --accesslog=/path/to/access.log --startDate=2017-01-01.13:00:00 --duration=daily --threshold=250
 
-# Run Test
+# Run Test (Mocked)
 1. In package "com.ef.log.application.service" run "LogServiceTest.java"
