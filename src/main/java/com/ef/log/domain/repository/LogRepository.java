@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface LogRepository extends JpaRepository<Log, Long> {
 
-    @Query("select l.ip, l.dateTime, count(l.ip) from Log l " +
+    @Query("select l.ip, count(l.ip) from Log l " +
             "where l.dateTime between :startDate and :endDate " +
             "group by l.ip " +
             "having count(l.ip) > :threshold")

@@ -46,37 +46,26 @@ public class LogService {
         return log;
     }
 
-    private long fileSize(String fileLocation) throws IOException {
-        long numberOfLines;
-        try (Stream<String> s = Files.lines(Paths.get(fileLocation),
-                Charset.forName("UTF-8"))) {
-            numberOfLines = s.count();
-
-        } catch (IOException e) {
-            logger.error(e.getMessage(), e);
-            throw e;
-        }
-        return numberOfLines;
-    }
-
     public Long load(String fileName) {
 
         logger.info("read started");
-        long size = 0;
+        long counter = 0;
 
         try (BufferedReader br = Files.newBufferedReader(Paths.get(fileName),
                 Charset.forName("UTF-8"))) {
 
-            size = fileSize(fileName);
-
-            logger.info("Total number of lines is {}", size);
-
             // read line by line
             String line;
-            int counter = 0;
-            ArrayList<Log> logs = new ArrayList<>();
+            List<Log> logs = new ArrayList<>();
 
-            while ((line = br.readLine()) != null) {
+            while (true) {
+                line = br.readLine();
+
+                if (line == null){
+                    batch(logs);
+                    break;
+                }
+
                 String[] data = line.split("\\|");
 
                 if (data.length != 5) {
@@ -86,21 +75,26 @@ public class LogService {
 
                 logs.add(createLog(data));
 
-                if ((counter + 1) % 500 == 0 || (counter + 1) == size) {
-                    logger.info("Running batch ......");
-                    logRepository.saveAll(logs);
-                    logs.clear();
-                    logger.info("Batch completed ......");
+                if ((counter + 1) % 500 == 0) {
+                    batch(logs);
                 }
                 counter++;
             }
             logger.info("records written");
+            logger.info("Total number of lines is {}", counter);
 
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
         }
 
-        return size;
+        return counter;
+    }
+
+    private void batch(List<Log> logs) {
+        logger.info("Running batch ......");
+        logRepository.saveAll(logs);
+        logs.clear();
+        logger.info("Batch completed ......");
     }
 
     public Integer getRequests(String... args) {
@@ -111,9 +105,9 @@ public class LogService {
 
         logger.info("Printing {} logs................................ ", logList.size());
         logList.forEach(l -> {
-            logger.info("Request log ip and dateTime is: {} | {}. Request count is: {} ", l[0].toString(), l[1].toString(), l[2]);
+            logger.info("Request log ip and dateTime is: {} | Request count is: {} ", l[0].toString(), l[1].toString());
             Comment comment = new Comment();
-            comment.setCount((Long) l[2]);
+            comment.setCount((Long) l[1]);
             comment.setIp((l[0]).toString());
             comment.setThreshold(paramMapper.getThreshold());
             comment.setStartDate(paramMapper.getStartDate());

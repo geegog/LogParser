@@ -1,7 +1,6 @@
 package com.ef.log.pojo;
 
 import com.ef.log.domain.model.Duration;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.time.LocalDateTime;
