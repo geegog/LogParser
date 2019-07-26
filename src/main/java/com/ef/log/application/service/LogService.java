@@ -59,14 +59,15 @@ public class LogService {
         return numberOfLines;
     }
 
-    public void load(String fileName) {
+    public Long load(String fileName) {
 
         logger.info("read started");
+        long size = 0;
 
         try (BufferedReader br = Files.newBufferedReader(Paths.get(fileName),
                 Charset.forName("UTF-8"))) {
 
-            long size = fileSize(fileName);
+            size = fileSize(fileName);
 
             logger.info("Total number of lines is {}", size);
 
@@ -77,6 +78,12 @@ public class LogService {
 
             while ((line = br.readLine()) != null) {
                 String[] data = line.split("\\|");
+
+                if (data.length != 5) {
+                    logger.warn("incorrect record size.... data not saved!");
+                    continue;
+                }
+
                 logs.add(createLog(data));
 
                 if ((counter + 1) % 500 == 0 || (counter + 1) == size) {
@@ -92,9 +99,11 @@ public class LogService {
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
         }
+
+        return size;
     }
 
-    public void getRequests(String... args) {
+    public Integer getRequests(String... args) {
         ParamMapper paramMapper = new ParamMapper(args);
         logger.info(paramMapper.toString());
 
@@ -102,7 +111,7 @@ public class LogService {
 
         logger.info("Printing {} logs................................ ", logList.size());
         logList.forEach(l -> {
-            logger.info("Reqest log ip and dateTime is: {} | {}. Request count is: {} ", l[0].toString(), l[1].toString(), l[2]);
+            logger.info("Request log ip and dateTime is: {} | {}. Request count is: {} ", l[0].toString(), l[1].toString(), l[2]);
             Comment comment = new Comment();
             comment.setCount((Long) l[2]);
             comment.setIp((l[0]).toString());
@@ -112,6 +121,8 @@ public class LogService {
             comment.setDescription("You have made over " + paramMapper.getThreshold() + " requests.");
             commentRepository.save(comment);
         });
+
+        return logList.size();
 
     }
 

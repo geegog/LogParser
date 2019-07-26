@@ -28,6 +28,10 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
     @Override
     public void run(String...args) throws Exception {
 
+        if (args.length != 4) {
+            logger.info("Application shutting down, 4 arguments are required. User passed {} . \n Try again by passing the correct args: For example; --accesslog=/path/to/file --startDate=2017-01-01.13:00:00 --duration=hourly --threshold=100", Arrays.toString(args));
+        }
+
         String[] commandLineArguments = {env.getProperty("startDate"), env.getProperty("duration"), env.getProperty("threshold")};
 
         logger.info("startDate: {}, duration: {}, threshold: {}", commandLineArguments[0], commandLineArguments[1], commandLineArguments[2]);
