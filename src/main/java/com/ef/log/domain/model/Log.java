@@ -13,7 +13,8 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(indexes = {@Index(name = "ip", columnList = "ip"),
-        @Index(name = "dateTime", columnList = "dateTime")})
+        @Index(name = "date_time", columnList = "dateTime"),
+        @Index(name = "ip_date_time", columnList = "ip, dateTime")})
 public class Log extends BaseEntity {
 
     private LocalDateTime dateTime;

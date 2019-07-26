@@ -30,6 +30,7 @@ public class LogService {
 
     private final CommentRepository commentRepository;
 
+    @Autowired
     public LogService(LogRepository logRepository, CommentRepository commentRepository) {
         this.logRepository = logRepository;
         this.commentRepository = commentRepository;
@@ -58,8 +59,7 @@ public class LogService {
         return numberOfLines;
     }
 
-    public void load() {
-        String fileName = "access.log";
+    public void load(String fileName) {
 
         logger.info("read started");
 
@@ -102,10 +102,10 @@ public class LogService {
 
         logger.info("Printing {} logs................................ ", logList.size());
         logList.forEach(l -> {
-            logger.info("Log: {} count is: {} ", l[0].toString(), l[1]);
+            logger.info("Reqest log ip and dateTime is: {} | {}. Request count is: {} ", l[0].toString(), l[1].toString(), l[2]);
             Comment comment = new Comment();
-            comment.setCount((Long) l[1]);
-            comment.setIp(((Log)l[0]).getIp());
+            comment.setCount((Long) l[2]);
+            comment.setIp((l[0]).toString());
             comment.setThreshold(paramMapper.getThreshold());
             comment.setStartDate(paramMapper.getStartDate());
             comment.setEndDate(paramMapper.getEndDate());
