@@ -11,8 +11,9 @@ The app is built using Sprint Boot and gradle.
 5. Run main class "com.ef.Parser"
 6. You can also build project to create a runnable jar file of the application
 
+# To run jar
+
+java -jar /path/to/jar/parser-0.0.1-SNAPSHOT.jar --accesslog=/path/to/access.log --startDate=2017-01-01.13:00:00 --duration=daily --threshold=250
+
 # Run Test
 1. In package "com.ef.log.application.service" run "LogServiceTest.java"
-
-# How to run jar (provided in root folder)
-java -jar parser-0.0.1-SNAPSHOT.jar --accesslog=/path/to/access.log --startDate=2017-01-01.13:00:00 --duration=daily --threshold=250
