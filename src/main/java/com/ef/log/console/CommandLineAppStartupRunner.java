@@ -15,11 +15,14 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
 
     private static final Logger logger = LoggerFactory.getLogger(CommandLineAppStartupRunner.class);
 
-    @Autowired
-    LogService logService;
+    private final LogService logService;
 
-    @Autowired
-    private Environment env;
+    private final Environment env;
+
+    public CommandLineAppStartupRunner(LogService logService, Environment env) {
+        this.logService = logService;
+        this.env = env;
+    }
 
     @Override
     public void run(String...args) throws Exception {

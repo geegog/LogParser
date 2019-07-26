@@ -10,14 +10,12 @@ import java.time.format.DateTimeFormatter;
 @Data
 public class ParamMapper {
 
-    private int threshold;
+    private Long threshold;
 
     private Duration duration;
 
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime startDate;
 
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime endDate;
 
     public ParamMapper(String... args) {
@@ -25,7 +23,7 @@ public class ParamMapper {
         String duration = args[1];
         String threshold = args[2];
 
-        this.threshold = Integer.valueOf(threshold);
+        this.threshold = Long.valueOf(threshold);
         this.startDate = LocalDateTime.parse(startDate, DateTimeFormatter.ofPattern("yyyy-MM-dd.HH:mm:ss"));
         this.endDate = calculateEndDate(Duration.valueOf(duration.toUpperCase()));
         this.duration = Duration.valueOf(duration.toUpperCase());

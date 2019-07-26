@@ -1,6 +1,8 @@
 package com.ef.log.application.service;
 
+import com.ef.log.domain.model.Comment;
 import com.ef.log.domain.model.Log;
+import com.ef.log.domain.repository.CommentRepository;
 import com.ef.log.domain.repository.LogRepository;
 import com.ef.log.pojo.ParamMapper;
 import org.slf4j.Logger;
@@ -16,6 +18,7 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Stream;
 
 @Service
@@ -23,8 +26,14 @@ public class LogService {
 
     private static final Logger logger = LoggerFactory.getLogger(LogService.class);
 
-    @Autowired
-    private LogRepository logRepository;
+    private final LogRepository logRepository;
+
+    private final CommentRepository commentRepository;
+
+    public LogService(LogRepository logRepository, CommentRepository commentRepository) {
+        this.logRepository = logRepository;
+        this.commentRepository = commentRepository;
+    }
 
     private Log createLog(String[] line) {
         Log log = new Log();
@@ -88,6 +97,22 @@ public class LogService {
     public void getRequests(String... args) {
         ParamMapper paramMapper = new ParamMapper(args);
         logger.info(paramMapper.toString());
+
+        List<Object[]> logList = logRepository.getLogs(paramMapper.getThreshold(), paramMapper.getStartDate(), paramMapper.getEndDate());
+
+        logger.info("Printing {} logs................................ ", logList.size());
+        logList.forEach(l -> {
+            logger.info("Log: {} count is: {} ", l[0].toString(), l[1]);
+            Comment comment = new Comment();
+            comment.setCount((Long) l[1]);
+            comment.setIp(((Log)l[0]).getIp());
+            comment.setThreshold(paramMapper.getThreshold());
+            comment.setStartDate(paramMapper.getStartDate());
+            comment.setEndDate(paramMapper.getEndDate());
+            comment.setDescription("You have made over " + paramMapper.getThreshold() + " requests.");
+            commentRepository.save(comment);
+        });
+
     }
 
 }

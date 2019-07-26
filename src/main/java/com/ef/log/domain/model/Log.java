@@ -10,9 +10,10 @@ import javax.persistence.Table;
 import java.time.LocalDateTime;
 
 @Data
-@EqualsAndHashCode(callSuper=true)
+@EqualsAndHashCode(callSuper = true)
 @Entity
-@Table(indexes = { @Index(name = "IDX_IP", columnList = "ip") })
+@Table(indexes = {@Index(name = "ip", columnList = "ip"),
+        @Index(name = "dateTime", columnList = "dateTime")})
 public class Log extends BaseEntity {
 
     private LocalDateTime dateTime;
